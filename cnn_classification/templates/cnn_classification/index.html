@@ -1,0 +1,48 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>CNN Django</title>
+
+    {%  load bootstrap4  %}
+    {%  bootstrap_css  %}
+</head>
+
+<body>
+    <div class="container py-2 mt-2">
+        <h1>CNN para Clasificación de Imágenes</h1>
+        <p>Sube una imágen de tu dispositivo para obtener su clasificación. Esta aplicación no almacenará las imágenes que cargues</p>
+        <p><small>Para consultar el dataset utilizado para el entrenamiento del modelo, visita  
+            <a href="https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset" target="_blank">Kaggle</a></small>
+        </p>
+
+        <form method="post" enctype="multipart/form-data" style="margin-top: 50px; margin-bottom: 30px;">
+            {% csrf_token %}
+            <div class="form-group">
+                {%  bootstrap_form form %}
+                {%  buttons %}
+                <button type="submit" id="btnUpload" class="btn btn-primary form-control">Clasificar</button>
+                {%  endbuttons  %}
+            </div>
+        </form>
+
+        {% if image_uri is not None %}
+            <div class="text-center">
+                <img src="{{ image_uri }}" class="img-fluid" alt="Uploaded image"
+                style="max-width: min(500px, 100%); height: auto; margin-top: 30px;">
+            </div>
+            {% if predicted_label is not None %}
+                <div class="alert alert-primary mt-2" role="alert">
+                    <h4 class="alert-heading">¡Aquí está el resultado!</h4>
+                    <p>Creemos que tu imágen pertenece a la clase  <b>{{ predicted_label }}</b></p>
+                </div>
+            {% else %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    <h4 class="alert-heading">Esto es incómodo...</h4>
+                    <p>Desafortunadamente, no pudimos predecir una clase... ¡Pero siempre puedes intentarlo nuevamente con otra imágen! :-)</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+
